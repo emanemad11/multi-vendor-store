@@ -4,10 +4,12 @@ namespace App\Providers;
 
 
 use App\Rules\Filter;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // JsonResponse::withoutWrapping();
         validator::extend('filter', function ($attribute, $value, $params) {
             return !in_array(strtolower($value), $params);
         }, 'the value is prohibted');

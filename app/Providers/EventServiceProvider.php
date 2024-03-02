@@ -6,6 +6,10 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Observers\CartObserver;
+use App\Models\Cart;
+use App\Models\Order;
+use App\Observers\OrderObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -25,7 +29,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Cart::observe(CartObserver::class);
+        Order::observe(OrderObserver::class);
     }
 
     /**

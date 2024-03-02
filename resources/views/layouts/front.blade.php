@@ -49,7 +49,7 @@
                             <ul class="menu-top-link">
                                 <li>
                                     <div class="select-position">
-                                        <form action="" method="post">
+                                        <form method="post">
                                             @csrf
                                             <select name="currency_code" onchange="this.form.submit()">
                                                 <option value="USD" @selected('USD' == session('currency_code'))>$ USD</option>
@@ -65,11 +65,11 @@
                                 <li>
                                     <div class="select-position">
                                         <form action="{{ URL::current() }}" method="get">
-                                            {{-- <select name="locale" onchange="this.form.submit()">
-                                                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                            <select name="locale" onchange="this.form.submit()">
+                                                {{-- @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
                                                     <option value="{{ $localeCode }}" @selected($localeCode == App::currentLocale())>{{ $properties['native'] }}</option>
-                                                @endforeach
-                                            </select> --}}
+                                                @endforeach --}}
+                                            </select>
                                         </form>
                                     </div>
                                 </li>
@@ -88,31 +88,34 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-end">
                             @auth
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                {{ Auth::user()->name }}
-                            </div>
-                            <ul class="user-login">
-                                <li>
-                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout').submit()">Sign Out</a>
-                                </li>
-                                <form action="{{ route('logout') }}" id="logout" method="post" style="display:none">
-                                    @csrf
-                                </form>
-                            </ul>
+                                <div class="user">
+                                    <i class="lni lni-user"></i>
+                                    {{ Auth::user()->name }}
+                                </div>
+                                <ul class="user-login">
+                                    <li>
+                                        <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout').submit()">Sign
+                                            Out</a>
+                                    </li>
+                                    <form action="{{ route('logout') }}" id="logout" method="post"
+                                        style="display:none">
+                                        @csrf
+                                    </form>
+                                </ul>
                             @else
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                {{ __('Hello')}}
-                            </div>
-                            <ul class="user-login">
-                                <li>
-                                    <a href="{{ route('login') }}">{{ Lang::get('Sign In') }}</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            </ul>
+                                <div class="user">
+                                    <i class="lni lni-user"></i>
+                                    {{ __('Hello') }}
+                                </div>
+                                <ul class="user-login">
+                                    <li>
+                                        <a href="{{ route('login') }}">{{ Lang::get('Sign In') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    </li>
+                                </ul>
                             @endauth
                         </div>
                     </div>
@@ -174,7 +177,57 @@
                                         <span class="total-items">0</span>
                                     </a>
                                 </div>
-                                {{-- <x-cart-menu /> --}}
+                                <x-cart-menu />
+                                {{-- <x-text-input /> --}}
+                                {{-- <x-cartt-menu /> --}}
+                                {{-- <div class="cart-items">
+                                    <a href="javascript:void(0)" class="main-btn">
+                                        <i class="lni lni-cart"></i>
+                                        <span class="total-items">{{ $items->count() }}</span>
+                                    </a>
+                                    <!-- Shopping Item -->
+                                    <div class="shopping-item">
+                                        <div class="dropdown-cart-header">
+                                            <span>{{ $items->count() }} Items</span>
+                                            <a href="{{ route('cart.index') }}">View Cart</a>
+                                        </div>
+                                        <ul class="shopping-list">
+                                            @foreach ($items as $item)
+                                                <li>
+                                                    <a href="javascript:void(0)" class="remove"
+                                                        title="Remove this item"><i class="lni lni-close"></i></a>
+                                                    <div class="cart-img-head">
+                                                        <a class="cart-img"
+                                                            href="{{ route('products.show', $item->product->slug) }}">
+                                                            <img src="{{ $item->product->image_url }}"
+                                                                alt="#"></a>
+                                                    </div>
+                                                    <div class="content">
+                                                        <h4><a
+                                                                href="product-details.html">{{ $item->product->name }}</a>
+                                                        </h4>
+                                                        <p class="quantity">{{ $item->quantity }}x - <span
+                                                                class="amount">{{ Currency::format($item->product->price) }}</span>
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        <div class="bottom">
+                                            <div class="total">
+                                                <span>Total</span>
+                                                <span class="total-amount">{{ Currency::format($total) }}</span>
+                                            </div>
+                                            <div class="button">
+                                                <a href="{{ route('checkout') }}" class="btn animate">Checkout</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/ End Shopping Item -->
+                                </div> --}}
+
+
+
                             </div>
                         </div>
                     </div>
@@ -248,9 +301,10 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                            data-bs-target="#submenu-1-3" aria-controls="navbarSupportedContent"
-                                            aria-expanded="false" aria-label="Toggle navigation">Shop</a>
+                                        <a class="dd-menu collapsed" href="javascript:void(0)"
+                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-3"
+                                            aria-controls="navbarSupportedContent" aria-expanded="false"
+                                            aria-label="Toggle navigation">Shop</a>
                                         <ul class="sub-menu collapse" id="submenu-1-3">
                                             <li class="nav-item"><a href="product-grids.html">Shop Grid</a></li>
                                             <li class="nav-item"><a href="product-list.html">Shop List</a></li>
@@ -260,11 +314,13 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                            data-bs-target="#submenu-1-4" aria-controls="navbarSupportedContent"
-                                            aria-expanded="false" aria-label="Toggle navigation">Blog</a>
+                                        <a class="dd-menu collapsed" href="javascript:void(0)"
+                                            data-bs-toggle="collapse" data-bs-target="#submenu-1-4"
+                                            aria-controls="navbarSupportedContent" aria-expanded="false"
+                                            aria-label="Toggle navigation">Blog</a>
                                         <ul class="sub-menu collapse" id="submenu-1-4">
-                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a>
+                                            <li class="nav-item"><a href="blog-grid-sidebar.html">Blog Grid
+                                                    Sidebar</a>
                                             </li>
                                             <li class="nav-item"><a href="blog-single.html">Blog Single</a></li>
                                             <li class="nav-item"><a href="blog-single-sidebar.html">Blog Single
@@ -432,7 +488,8 @@
                         <div class="col-lg-4 col-12">
                             <div class="payment-gateway">
                                 <span>We Accept:</span>
-                                <img src="{{ asset('assets/images/footer/credit-cards-footer.png') }}" alt="#">
+                                <img src="{{ asset('assets/images/footer/credit-cards-footer.png') }}"
+                                    alt="#">
                             </div>
                         </div>
                         <div class="col-lg-4 col-12">

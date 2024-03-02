@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -14,6 +16,14 @@ class Product extends Model
     protected $fillable = [
         'name', 'slug', 'description', 'image', 'category_id', 'store_id',
         'price', 'compare_price', 'status',
+    ];
+    protected $hidden=[
+        'created_at',
+        'updated_at',
+        'image'
+    ];
+    protected $appends = [
+        'image_url',
     ];
 
     public function category()
@@ -43,10 +53,16 @@ class Product extends Model
                 $builder->where('store_id', '=', $user->store_id);
             }
             //globalscopes =>يتم استدعاءها عند تنفيز اي عمليه ف الكنترولر (index,view,.....)
+
+
+        });
+        static::creating(function(Product $product) {
+            $product->slug = Str::slug($product->name);
         });
     }
     public function scopeActive(Builder $builder)
     {
+        // localscope
         $builder->where('status', '=', 'active');
     }
      // Accessors
@@ -67,5 +83,40 @@ class Product extends Model
             return 0;
         }
         return round(100 - (100 * $this->price / $this->compare_price), 1);
+    }
+    public function scopeFilter(Builder $builder, $filters)
+    {
+        $options = array_merge([
+            'store_id' => null,
+            'category_id' => null,
+            'tag_id' => null,
+            'status' => 'active',
+        ], $filters);
+
+        $builder->when($options['status'], function ($query, $status) {
+            return $query->where('status', $status);
+        });
+
+        $builder->when($options['store_id'], function($builder, $value) {
+            $builder->where('store_id', $value);
+        });
+        $builder->when($options['category_id'], function($builder, $value) {
+            $builder->where('category_id', $value);
+        });
+        $builder->when($options['tag_id'], function($builder, $value) {
+
+            $builder->whereExists(function($query) use ($value) {
+                $query->select(1)
+                    ->from('product_tag')
+                    ->whereRaw('product_id = products.id')
+                    ->where('tag_id', $value);
+            });
+            // $builder->whereRaw('id IN (SELECT product_id FROM product_tag WHERE tag_id = ?)', [$value]);
+            // $builder->whereRaw('EXISTS (SELECT 1 FROM product_tag WHERE tag_id = ? AND product_id = products.id)', [$value]);
+
+            // $builder->whereHas('tags', function($builder) use ($value) {
+            //     $builder->where('id', $value);
+            // });
+        });
     }
 }

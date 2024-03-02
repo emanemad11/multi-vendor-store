@@ -6,6 +6,10 @@ use App\Http\Controllers\DashboardController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController;
+use App\Http\Controllers\Front\CartController;
+use App\Http\Controllers\Front\CheckOutController;
+
+use App\Models\Cart;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +22,9 @@ use App\Http\Controllers\Front\ProductsController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dash', function () {
     return view('dashboard');
@@ -28,18 +32,33 @@ Route::get('/dash', function () {
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-// Route::get('/', [HomeController::class, 'index'])
-// ->name('home');
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home');
 Route::get('/products', [ProductsController::class, 'index'])
     ->name('products.index');
 
 Route::get('/products/{product:slug}', [ProductsController::class, 'show'])
     ->name('products.show');
 
-require __DIR__ . '/auth.php';
+
+
+
+Route::resource('cart', CartController::class);
+
+// Route::get('checkout',[CheckOutController::class , 'index'])->name('ckeckout.index');
+// Route::get('checkout',[CheckOutController::class])->name('checkout');
+Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
+// Route::post('checkout', [CheckoutController::class, 'store']);
+
+
+
+// require __DIR__ . '/auth.php';
+
+
+
 require __DIR__ . '/dashboard.php';

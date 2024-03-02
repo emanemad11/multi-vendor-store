@@ -44,10 +44,14 @@
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
                             <h2 class="title">{{ $product->name }}</h2>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">{{ $product->category->name }}</a></p>
-                            {{-- <h3 class="price">{{ Currency::format($product->price) }}@if($product->compare_price)<span>{{ Currency::format($product->compare_price) }}</span>@endif</h3> --}}
+                            <p class="category"><i class="lni lni-tag"></i> Drones:<a
+                                    href="javascript:void(0)">{{ $product->category->name }}</a></p>
+                            <h3 class="price">{{ currency::format($product->price) }}@if ($product->compare_price)
+                                    <span>{{ currency::format($product->compare_price) }}</span>
+                                @endif
+                            </h3>
                             <p class="info-text">{{ $product->description }}</p>
-                            <form action="" method="post">
+                            <form  method="post" action="{{ route('cart.store') }}">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <div class="row">
@@ -99,7 +103,8 @@
                                     <div class="row align-items-end">
                                         <div class="col-lg-4 col-md-4 col-12">
                                             <div class="button cart-button">
-                                                <button class="btn" type="submit" style="width: 100%;">Add to Cart</button>
+                                                <button class="btn" type="submit" style="width: 100%;">Add to
+                                                    Cart</button>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-12">
@@ -109,7 +114,8 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-12">
                                             <div class="wish-button">
-                                                <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                                <button class="btn"><i class="lni lni-heart"></i> To
+                                                    Wishlist</button>
                                             </div>
                                         </div>
                                     </div>
@@ -344,24 +350,24 @@
     <!-- End Review Modal -->
 
     @push('scripts')
-    <script type="text/javascript">
-        const current = document.getElementById("current");
-        const opacity = 0.6;
-        const imgs = document.querySelectorAll(".img");
-        imgs.forEach(img => {
-            img.addEventListener("click", (e) => {
-                //reset opacity
-                imgs.forEach(img => {
-                    img.style.opacity = 1;
+        <script type="text/javascript">
+            const current = document.getElementById("current");
+            const opacity = 0.6;
+            const imgs = document.querySelectorAll(".img");
+            imgs.forEach(img => {
+                img.addEventListener("click", (e) => {
+                    //reset opacity
+                    imgs.forEach(img => {
+                        img.style.opacity = 1;
+                    });
+                    current.src = e.target.src;
+                    //adding class
+                    //current.classList.add("fade-in");
+                    //opacity
+                    e.target.style.opacity = opacity;
                 });
-                current.src = e.target.src;
-                //adding class
-                //current.classList.add("fade-in");
-                //opacity
-                e.target.style.opacity = opacity;
             });
-        });
-    </script>
+        </script>
     @endpush
 
 </x-front-layout>

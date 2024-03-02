@@ -23,12 +23,12 @@
             @endfor
             <li><span>{{ $product->rating }} Review(s)</span></li>
         </ul>
-        {{-- <div class="price">
-            <span>{{ Currency::format($product->price) }}</span>
+        <div class="price">
+            <span>{{ currency::format($product->price) }}</span>
             @if ($product->compare_price)
             <span class="discount-price">{{ Currency::format($product->compare_price) }}</span>
             @endif
-        </div> --}}
+        </div>
     </div>
 </div>
 <!-- End Single Product -->
